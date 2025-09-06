@@ -1,0 +1,128 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+<div class="room-container">
+    <div>
+        <h1>{{room.name}}</h1>
+
+        <p>{{room.description}}</p>
+
+        <div class="comment_wrapper">
+            <h3>Convesation</h3>
+            <hr>
+            {% for message in room_messages %}
+            <div>
+                {% if request.user == message.user %}
+                <a href="{% url 'delete-message' message.id %}">Delete</a>
+                {% endif %}
+                <small>{{message.user}} {{message.created | timesince}} ago</small>
+                <p>{{message.body}}</p>
+                <hr>
+            </div>  
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="comment_form">
+            <form method="POST" action="">
+                {% csrf_token %}
+            {% comment %} {{form}} {% endcomment %}
+                <input type="text" name="body" placeholder="Write your message...." /><br>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <div>
+        <h3>Paricipents</h3>
+        <hr>
+        {% for participent in  participents%}
+            <div>
+                <p>@{{participent.username}}</p>
+            </div>
+        {% endfor %}
+</div>
+{% endblock content %}
+
+<!-- !DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            padding: 40px 32px;
+            text-align: center;
+        }
+        h1 {
+            color: #2d3a4b;
+            font-size: 2.2rem;
+            margin-bottom: 18px;
+        }
+        .room-info {
+            margin-top: 18px;
+        }
+        .room-details {
+            background: #f7faff;
+            border-radius: 8px;
+            padding: 20px 0 16px 0;
+            margin: 0 auto 24px auto;
+            max-width: 400px;
+            box-shadow: 0 2px 8px rgba(102,166,255,0.07);
+        }
+        .room-details li {
+            color: #4a6073;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            list-style: none;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 26px;
+            background: #66a6ff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background 0.2s;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+        .btn:hover { background: #4a90e2; }
+    </>
+</head>
+<body>
+    <div class="container">
+        <h1>Room: Example Room</h1>
+        <div class="room-info">
+            <div class="room-details">
+                <ul>
+                    <li><strong>Host:</strong> John Doe</li>
+                    <li><strong>Members:</strong> 5</li>
+                </ul>
+            </div>
+            <p style="color:#4a6073; font-size:1.1rem;">Welcome to the Example Room! Here you can chat, share ideas, or collaborate with others.</p>
+            <a href="/" class="btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html -->
